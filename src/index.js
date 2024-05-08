@@ -488,6 +488,14 @@ module.exports = (element, options = {}) => {
   // Add listeners to element
   addNodeEventListener(element, 'pointerdown', e => { elementFocused(e) })
 
+  // Add listeners to the parent element
+  addNodeEventListener(element.parentElement, 'pointerdown', e => {
+    // Check if the event target is not the element itself or any of its children
+    if (!element.contains(e.target) && !!options.parent) {
+      elementFocused(e)
+    }
+  })
+
   // Add listeners to thumbs and set [data-disabled] on disabled thumbs
   Array.from(thumb).forEach((t, i) => {
     addNodeEventListener(t, 'pointerdown', e => { initiateThumbDrag(e, i, t) })
